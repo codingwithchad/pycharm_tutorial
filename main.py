@@ -23,6 +23,8 @@ pygame.display.set_icon(icon)
 player_img = pygame.image.load("assets\\space_invaders_defense.png")  # Icons made by Freepik from www.flaticon.com
 player_x = DISPLAY_WIDTH / 2
 player_y = ((DISPLAY_HEIGHT / 4)*3)
+player_x_change = 0
+player_speed = 0.1 #  Speed
 
 # Game loop
 running = True
@@ -40,13 +42,25 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        #  If keystroke is pressed, check if left arrow or right arrow
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                player_x_change = player_speed * -1
+            if event.key == pygame.K_RIGHT:
+                player_x_change = player_speed
+
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
+                player_x_change = 0
+
+
     # Fill the screen with a color
     # Objects render in order, screen.fill should be first
     screen.fill(SKY_BLUE)
 
     # Calls the player function
-    player_y -= 0.01
 
+    player_x += player_x_change
     player0(player_x, player_y)
     pygame.display.update()
 
