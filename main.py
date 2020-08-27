@@ -13,26 +13,24 @@ DISPLAY_HEIGHT = 600
 # Create the screen (width, height)
 screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 
-# Player
-player_img = pygame.image.load("assets\\space_invaders_defense.png")
-player_x = DISPLAY_WIDTH / 2
-player_y = ((DISPLAY_HEIGHT / 4)*3)
 
-# Fill the screen with a color
-# Objects render in order, screen.fill should be first
-screen.fill(SKY_BLUE)
 # Title and Icon
 pygame.display.set_caption("Seagull Invaders")
-# icon By Freepik
-icon = pygame.image.load("assets\\bird.png") # Icons made by Freepik from www.flaticon.com
+icon = pygame.image.load("assets\\bird.png")  # Icons made by Freepik from www.flaticon.com
 pygame.display.set_icon(icon)
+
+# Player
+player_img = pygame.image.load("assets\\space_invaders_defense.png")  # Icons made by Freepik from www.flaticon.com
+player_x = DISPLAY_WIDTH / 2
+player_y = ((DISPLAY_HEIGHT / 4)*3)
 
 # Game loop
 running = True
 
+
 # Function to add the player to the screen
-def player0():
-    screen.blit(player_img, (player_x, player_y))
+def player0(x, y):
+    screen.blit(player_img, (x, y))
 
 
 while running:
@@ -42,8 +40,14 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+    # Fill the screen with a color
+    # Objects render in order, screen.fill should be first
+    screen.fill(SKY_BLUE)
+
     # Calls the player function
-    player0()
+    player_y -= 0.01
+
+    player0(player_x, player_y)
     pygame.display.update()
 
 
