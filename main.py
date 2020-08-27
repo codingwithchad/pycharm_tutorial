@@ -3,7 +3,7 @@ import pygame
 # Initialize pygame
 pygame.init()
 
-# Create the screen
+# Create the screen (width, height)
 screen = pygame.display.set_mode((800, 600))
 
 # Title and Icon
@@ -22,3 +22,4 @@ while running:
     # RGB values (red, green, blue)
     screen.fill((56, 25, 255))
     pygame.display.update()
+    # <div>Icons made by Freepik from www.flaticon.com
