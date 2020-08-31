@@ -35,7 +35,7 @@ enemy_x = random.randint(LEFT_BOUND, RIGHT_BOUND)
 enemy_y = random.randint(50, 150)
 enemy_speed = 0.3  # Speed
 enemy_x_change = enemy_speed
-enemy_y_change = 0
+enemy_y_change = 40
 
 
 # Game loop
@@ -85,8 +85,10 @@ while running:
     enemy_x += enemy_x_change
     if enemy_x >= RIGHT_BOUND:
         enemy_x_change = enemy_speed * -1
+        enemy_y += enemy_y_change
     elif enemy_x <= LEFT_BOUND:
         enemy_x_change = enemy_speed
+        enemy_y += enemy_y_change
 
     player0(player_x, player_y)
     enemy0(enemy_x, enemy_y)
