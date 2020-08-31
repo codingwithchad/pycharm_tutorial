@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # Initialize pygame
 pygame.init()
@@ -10,6 +11,9 @@ SKY_BLUE = (135, 206, 235)
 # Display size
 DISPLAY_WIDTH = 800
 DISPLAY_HEIGHT = 600
+RIGHT_BOUND = 736
+LEFT_BOUND = 0
+
 # Create the screen (width, height)
 screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 
@@ -27,8 +31,8 @@ player_speed = 0.15  # Speed
 
 # Enemy
 enemy_img = pygame.image.load("assets\\bird.png")  # Icons made by Freepik from www.flaticon.com
-enemy_x = DISPLAY_WIDTH / 2
-enemy_y = ((DISPLAY_HEIGHT / 4) * 3)
+enemy_x = random.randint(LEFT_BOUND, RIGHT_BOUND)
+enemy_y = random.randint(50, 150)
 enemy_x_change = 0
 enemy_speed = 0.15  # Speed
 
@@ -71,10 +75,15 @@ while running:
     # Calls the player function
 
     player_x += player_x_change
-    if player_x >= 736:
-        player_x = 736
-    elif player_x <= 0:
-        player_x = 0
+    if player_x >= RIGHT_BOUND:
+        player_x = RIGHT_BOUND
+    elif player_x <= LEFT_BOUND:
+        player_x = LEFT_BOUND
+        
+    if enemy_x >= RIGHT_BOUND:
+        enemy_x = RIGHT_BOUND
+    elif enemy_x <= LEFT_BOUND:
+        enemy_x = LEFT_BOUND
 
     player0(player_x, player_y)
     enemy0(enemy_x, enemy_y)
