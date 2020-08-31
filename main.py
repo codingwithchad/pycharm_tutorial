@@ -27,14 +27,16 @@ player_img = pygame.image.load("assets\\space_invaders_defense.png")  # Icons ma
 player_x = DISPLAY_WIDTH / 2
 player_y = ((DISPLAY_HEIGHT / 4) * 3)
 player_x_change = 0
-player_speed = 0.15  # Speed
+player_speed = 0.35  # Speed
 
 # Enemy
 enemy_img = pygame.image.load("assets\\bird.png")  # Icons made by Freepik from www.flaticon.com
 enemy_x = random.randint(LEFT_BOUND, RIGHT_BOUND)
 enemy_y = random.randint(50, 150)
-enemy_x_change = 0
-enemy_speed = 0.15  # Speed
+enemy_speed = 0.3  # Speed
+enemy_x_change = enemy_speed
+enemy_y_change = 0
+
 
 # Game loop
 running = True
@@ -72,18 +74,19 @@ while running:
     # Objects render in order, screen.fill should be first
     screen.fill(SKY_BLUE)
 
-    # Calls the player function
-
+    # Check for boundaries for player so it doesn't go off the screen
     player_x += player_x_change
     if player_x >= RIGHT_BOUND:
         player_x = RIGHT_BOUND
     elif player_x <= LEFT_BOUND:
         player_x = LEFT_BOUND
-        
+
+    # Enemy movement
+    enemy_x += enemy_x_change
     if enemy_x >= RIGHT_BOUND:
-        enemy_x = RIGHT_BOUND
+        enemy_x_change = enemy_speed * -1
     elif enemy_x <= LEFT_BOUND:
-        enemy_x = LEFT_BOUND
+        enemy_x_change = enemy_speed
 
     player0(player_x, player_y)
     enemy0(enemy_x, enemy_y)
