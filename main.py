@@ -17,6 +17,9 @@ LEFT_BOUND = 0
 # Create the screen (width, height)
 screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 
+# Background
+background = pygame.image.load("assets\\beach-background.jpg")
+
 # Title and Icon
 pygame.display.set_caption("Seagull Invaders")
 icon = pygame.image.load("assets\\bird.png")  # Icons made by Freepik from www.flaticon.com
@@ -27,13 +30,13 @@ player_img = pygame.image.load("assets\\space_invaders_defense.png")  # Icons ma
 player_x = DISPLAY_WIDTH / 2
 player_y = ((DISPLAY_HEIGHT / 4) * 3)
 player_x_change = 0
-player_speed = 0.35  # Speed
+player_speed = 3  # Speed
 
 # Enemy
 enemy_img = pygame.image.load("assets\\bird.png")  # Icons made by Freepik from www.flaticon.com
 enemy_x = random.randint(LEFT_BOUND, RIGHT_BOUND)
 enemy_y = random.randint(50, 150)
-enemy_speed = 0.3  # Speed
+enemy_speed = 2  # Speed
 enemy_x_change = enemy_speed
 enemy_y_change = 40
 
@@ -73,6 +76,7 @@ while running:
     # Fill the screen with a color
     # Objects render in order, screen.fill should be first
     screen.fill(SKY_BLUE)
+    screen.blit(background, (0,0))
 
     # Check for boundaries for player so it doesn't go off the screen
     player_x += player_x_change
