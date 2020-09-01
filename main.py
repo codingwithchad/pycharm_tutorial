@@ -28,7 +28,7 @@ pygame.display.set_icon(icon)
 # Player
 player_img = pygame.image.load("assets\\space_invaders_defense.png")  # Icons made by Freepik from www.flaticon.com
 player_x = DISPLAY_WIDTH / 2
-player_y = ((DISPLAY_HEIGHT / 4) * 3)
+player_y = DISPLAY_HEIGHT - 86
 player_x_change = 0
 player_speed = 3  # Speed
 
@@ -40,6 +40,15 @@ enemy_speed = 2  # Speed
 enemy_x_change = enemy_speed
 enemy_y_change = 40
 
+# balloon
+# Ready state - you can't see the balloon on the screen
+# Fire state - The balloon is moving
+balloon_img = pygame.image.load("assets\\balloon.png")  # Icons made by Freepik from www.flaticon.com
+balloon_x = 0
+balloon_y = DISPLAY_HEIGHT - 86
+balloon_speed = 3  # Speed
+balloon_y_change = balloon_speed
+balloon_state = "ready"
 
 # Game loop
 running = True
@@ -52,7 +61,14 @@ def player0(x, y):
 
 # Function to add the enemy to the screen
 def enemy0(x, y):
-    screen.blit(enemy_img, (x, y))
+    screen.blit(enemy_img, (x + 16, y + 10))
+
+
+# Function to add the enemy to the screen
+def release_balloon(x, y):
+    global balloon_state
+    balloon_state = "fire"
+    screen.blit(balloon_img, (x, y))
 
 
 while running:
@@ -68,6 +84,9 @@ while running:
                 player_x_change = player_speed * -1
             if event.key == pygame.K_RIGHT:
                 player_x_change = player_speed
+            if event.key == pygame.K_SPACE and balloon_state == "ready":
+                balloon_x = player_x  # Get the current location of the player, but don't change with the player
+                release_balloon(balloon_x, balloon_y)
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
@@ -76,7 +95,7 @@ while running:
     # Fill the screen with a color
     # Objects render in order, screen.fill should be first
     screen.fill(SKY_BLUE)
-    screen.blit(background, (0,0))
+    screen.blit(background, (0, 0))
 
     # Check for boundaries for player so it doesn't go off the screen
     player_x += player_x_change
@@ -93,6 +112,17 @@ while running:
     elif enemy_x <= LEFT_BOUND:
         enemy_x_change = enemy_speed
         enemy_y += enemy_y_change
+
+    # Reset the balloon when the balloon reaches the top of the screen
+    if balloon_y <= 0:
+        balloon_y = 480
+        balloon_state = "ready"
+
+    # Balloon movement
+    if balloon_state is "fire":
+        release_balloon(balloon_x, balloon_y)
+        balloon_y -= balloon_y_change
+
 
     player0(player_x, player_y)
     enemy0(enemy_x, enemy_y)
