@@ -1,6 +1,13 @@
-import pygame
+'''
+I am learning pygames by following along with the video https://www.youtube.com/watch?v=FfWpgLFMI7w
+The original code can be found https://github.com/attreyabhatt/Space-Invaders-Pygame
+I changed the aliens to seagulls and bullets to balloons.
+'''
 import random
 import math
+
+import pygame
+from pygame import mixer
 
 # Initialize pygame
 pygame.init()
@@ -21,6 +28,10 @@ screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 
 # Background
 background = pygame.image.load("assets\\beach-background.jpg")
+
+# Background Sound
+mixer.music.load("assets\\background.wav")
+mixer.music.play(-1)
 
 # Title and Icon
 pygame.display.set_caption("Seagull Invaders")
@@ -113,6 +124,8 @@ while running:
             if event.key == pygame.K_SPACE and balloon_state == "ready":
                 balloon_x = player_x  # Get the current location of the player, but don't change with the player
                 release_balloon(balloon_x, balloon_y)
+                bullet_sound = mixer.Sound("assets\\laser.wav")
+                bullet_sound.play()
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
@@ -153,6 +166,8 @@ while running:
             score_value += 100
             enemy_x[i] = random.randint(LEFT_BOUND, RIGHT_BOUND - 36)
             enemy_y[i] = random.randint(50, 150)
+            explosion_sound = mixer.Sound("assets\\explosion.wav")
+            explosion_sound.play()
 
     # Reset the balloon when the balloon reaches the top of the screen
     if balloon_y <= 0:
