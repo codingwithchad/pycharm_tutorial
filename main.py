@@ -46,9 +46,8 @@ enemy_y_change = 40
 balloon_img = pygame.image.load("assets\\balloon.png")  # Icons made by Freepik from www.flaticon.com
 balloon_x = 0
 balloon_y = DISPLAY_HEIGHT - 86
-balloon_speed = 2  # Speed
-balloon_x_change = balloon_speed
-balloon_y_change = 10
+balloon_speed = 3  # Speed
+balloon_y_change = balloon_speed
 balloon_state = "ready"
 
 # Game loop
@@ -85,15 +84,13 @@ while running:
                 player_x_change = player_speed * -1
             if event.key == pygame.K_RIGHT:
                 player_x_change = player_speed
-            if event.key == pygame.K_SPACE:
-                release_balloon(player_x, balloon_y)
+            if event.key == pygame.K_SPACE and balloon_state == "ready":
+                balloon_x = player_x  # Get the current location of the player, but don't change with the player
+                release_balloon(balloon_x, balloon_y)
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                 player_x_change = 0
-
-
-
 
     # Fill the screen with a color
     # Objects render in order, screen.fill should be first
@@ -116,9 +113,14 @@ while running:
         enemy_x_change = enemy_speed
         enemy_y += enemy_y_change
 
+    # Reset the balloon when the balloon reaches the top of the screen
+    if balloon_y <= 0:
+        balloon_y = 480
+        balloon_state = "ready"
+
     # Balloon movement
     if balloon_state is "fire":
-        release_balloon(player_x, balloon_y)
+        release_balloon(balloon_x, balloon_y)
         balloon_y -= balloon_y_change
 
 
