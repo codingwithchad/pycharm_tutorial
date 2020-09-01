@@ -7,6 +7,7 @@ pygame.init()
 
 # COLORS RGB
 WHITE = (200, 200, 200)
+BLACK = (0, 0, 0)
 SKY_BLUE = (135, 206, 235)
 
 # Display size
@@ -39,12 +40,12 @@ enemy_x = []
 enemy_y = []
 enemy_y_change = 40
 num_enemies = 6
-enemy_speed = 2  # Speed
+enemy_speed = 1.5  # Speed
 
 enemy_x_change = enemy_speed
 for i in range(num_enemies):
     enemy_img.append(pygame.image.load("assets\\bird.png"))  # Icons made by Freepik from www.flaticon.com
-    enemy_x.append(random.randint(LEFT_BOUND, RIGHT_BOUND - 86))
+    enemy_x.append(random.randint(LEFT_BOUND + 45, (RIGHT_BOUND - 86) - 45))
     enemy_y.append(random.randint(50, 150))
 
 # balloon
@@ -57,7 +58,11 @@ balloon_speed = 4  # Speed
 balloon_y_change = balloon_speed
 balloon_state = "ready"
 
-score = 0
+# Score
+score_value = 0
+font = pygame.font.Font('freesansbold.ttf', 32)
+text_x = 10
+text_y = 10
 
 # Game loop
 running = True
@@ -80,7 +85,12 @@ def release_balloon(x, y):
     screen.blit(balloon_img, (x, y))
 
 
-def isCollision(enemyX, enemyY, balloonX, balloonY):
+def show_score(x, y):
+    score = font.render("Score : " + str(score_value), True, BLACK)
+    screen.blit(score, (x, y))
+
+
+def is_collision(enemyX, enemyY, balloonX, balloonY):
     distance = math.sqrt((math.pow(enemyX - balloonX, 2)) + (math.pow(enemyY - balloonY, 2)))
     if distance < 27:
         return True
@@ -136,14 +146,13 @@ while running:
             enemy_y[i] = random.randint(50, 150)
         enemy0(enemy_x[i], enemy_y[i], i)
         # Collision
-        collision = isCollision(enemy_x[i], enemy_y[i], balloon_x, balloon_y)
+        collision = is_collision(enemy_x[i], enemy_y[i], balloon_x, balloon_y)
         if collision:
             balloon_y = 480
             balloon_state = "ready"
-            score += 100
+            score_value += 100
             enemy_x[i] = random.randint(LEFT_BOUND, RIGHT_BOUND - 36)
             enemy_y[i] = random.randint(50, 150)
-            print(score)
 
     # Reset the balloon when the balloon reaches the top of the screen
     if balloon_y <= 0:
@@ -156,5 +165,5 @@ while running:
         balloon_y -= balloon_y_change
 
     player0(player_x, player_y)
-
+    show_score(text_x, text_y)
     pygame.display.update()
