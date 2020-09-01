@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 
 # Initialize pygame
 pygame.init()
@@ -34,7 +35,7 @@ player_speed = 3  # Speed
 
 # Enemy
 enemy_img = pygame.image.load("assets\\bird.png")  # Icons made by Freepik from www.flaticon.com
-enemy_x = random.randint(LEFT_BOUND, RIGHT_BOUND)
+enemy_x = random.randint(LEFT_BOUND, RIGHT_BOUND - 86)
 enemy_y = random.randint(50, 150)
 enemy_speed = 2  # Speed
 enemy_x_change = enemy_speed
@@ -46,9 +47,11 @@ enemy_y_change = 40
 balloon_img = pygame.image.load("assets\\balloon.png")  # Icons made by Freepik from www.flaticon.com
 balloon_x = 0
 balloon_y = DISPLAY_HEIGHT - 86
-balloon_speed = 3  # Speed
+balloon_speed = 4  # Speed
 balloon_y_change = balloon_speed
 balloon_state = "ready"
+
+score = 0
 
 # Game loop
 running = True
@@ -69,6 +72,13 @@ def release_balloon(x, y):
     global balloon_state
     balloon_state = "fire"
     screen.blit(balloon_img, (x, y))
+
+
+def isCollision(enemyX, enemyY, balloonX, balloonY):
+    distance = math.sqrt((math.pow(enemyX - balloonX, 2)) + (math.pow(enemyY - balloonY, 2)))
+    if distance < 27:
+        return True
+    return False
 
 
 while running:
@@ -123,7 +133,15 @@ while running:
         release_balloon(balloon_x, balloon_y)
         balloon_y -= balloon_y_change
 
-
+    # Collision
+    collision = isCollision(enemy_x, enemy_y, balloon_x, balloon_y)
+    if collision:
+        balloon_y = 480
+        balloon_state = "ready"
+        score += 100
+        enemy_x = random.randint(LEFT_BOUND, RIGHT_BOUND - 36)
+        enemy_y = random.randint(50, 150)
+        print(score)
     player0(player_x, player_y)
     enemy0(enemy_x, enemy_y)
     pygame.display.update()
