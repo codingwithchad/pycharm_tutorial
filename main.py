@@ -34,12 +34,18 @@ player_x_change = 0
 player_speed = 3  # Speed
 
 # Enemy
-enemy_img = pygame.image.load("assets\\bird.png")  # Icons made by Freepik from www.flaticon.com
-enemy_x = random.randint(LEFT_BOUND, RIGHT_BOUND - 86)
-enemy_y = random.randint(50, 150)
-enemy_speed = 2  # Speed
-enemy_x_change = enemy_speed
+enemy_img = []
+enemy_x = []
+enemy_y = []
 enemy_y_change = 40
+num_enemies = 6
+enemy_speed = 2  # Speed
+
+enemy_x_change = enemy_speed
+for i in range(num_enemies):
+    enemy_img.append(pygame.image.load("assets\\bird.png"))  # Icons made by Freepik from www.flaticon.com
+    enemy_x.append(random.randint(LEFT_BOUND, RIGHT_BOUND - 86))
+    enemy_y.append(random.randint(50, 150))
 
 # balloon
 # Ready state - you can't see the balloon on the screen
@@ -63,8 +69,8 @@ def player0(x, y):
 
 
 # Function to add the enemy to the screen
-def enemy0(x, y):
-    screen.blit(enemy_img, (x + 16, y + 10))
+def enemy0(x, y, i):
+    screen.blit(enemy_img[i], (x + 16, y + 10))
 
 
 # Function to add the enemy to the screen
@@ -115,13 +121,29 @@ while running:
         player_x = LEFT_BOUND
 
     # Enemy movement
-    enemy_x += enemy_x_change
-    if enemy_x >= RIGHT_BOUND:
-        enemy_x_change = enemy_speed * -1
-        enemy_y += enemy_y_change
-    elif enemy_x <= LEFT_BOUND:
-        enemy_x_change = enemy_speed
-        enemy_y += enemy_y_change
+    for i in range(num_enemies):
+        enemy_x[i] += enemy_x_change
+        if enemy_x[i] >= RIGHT_BOUND:
+            enemy_x_change = enemy_speed * -1
+            for y in range(num_enemies):
+                enemy_y[y] += enemy_y_change
+        elif enemy_x[i] <= LEFT_BOUND:
+            enemy_x_change = enemy_speed
+            for y in range(num_enemies):
+                enemy_y[y] += enemy_y_change
+        if enemy_y[i] >= DISPLAY_HEIGHT:
+            enemy_x[i] = random.randint(LEFT_BOUND, RIGHT_BOUND - 36)
+            enemy_y[i] = random.randint(50, 150)
+        enemy0(enemy_x[i], enemy_y[i], i)
+        # Collision
+        collision = isCollision(enemy_x[i], enemy_y[i], balloon_x, balloon_y)
+        if collision:
+            balloon_y = 480
+            balloon_state = "ready"
+            score += 100
+            enemy_x[i] = random.randint(LEFT_BOUND, RIGHT_BOUND - 36)
+            enemy_y[i] = random.randint(50, 150)
+            print(score)
 
     # Reset the balloon when the balloon reaches the top of the screen
     if balloon_y <= 0:
@@ -133,15 +155,6 @@ while running:
         release_balloon(balloon_x, balloon_y)
         balloon_y -= balloon_y_change
 
-    # Collision
-    collision = isCollision(enemy_x, enemy_y, balloon_x, balloon_y)
-    if collision:
-        balloon_y = 480
-        balloon_state = "ready"
-        score += 100
-        enemy_x = random.randint(LEFT_BOUND, RIGHT_BOUND - 36)
-        enemy_y = random.randint(50, 150)
-        print(score)
     player0(player_x, player_y)
-    enemy0(enemy_x, enemy_y)
+
     pygame.display.update()
