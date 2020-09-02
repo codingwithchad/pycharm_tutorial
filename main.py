@@ -75,6 +75,10 @@ font = pygame.font.Font('freesansbold.ttf', 32)
 text_x = 10
 text_y = 10
 
+game_over_font =  pygame.font.Font('freesansbold.ttf', 64)
+game_over_x = DISPLAY_HEIGHT / 2
+game_over_y = DISPLAY_WIDTH / 2
+
 # Game loop
 running = True
 
@@ -99,6 +103,11 @@ def release_balloon(x, y):
 def show_score(x, y):
     score = font.render("Score : " + str(score_value), True, BLACK)
     screen.blit(score, (x, y))
+
+
+def game_over_text():
+    over = game_over_font.render("GAME OVER", True, BLACK)
+    screen.blit(over, (200, 250))
 
 
 def is_collision(enemyX, enemyY, balloonX, balloonY):
@@ -154,10 +163,16 @@ while running:
             enemy_x_change = enemy_speed
             for y in range(num_enemies):
                 enemy_y[y] += enemy_y_change
-        if enemy_y[i] >= DISPLAY_HEIGHT:
-            enemy_x[i] = random.randint(LEFT_BOUND, RIGHT_BOUND - 36)
-            enemy_y[i] = random.randint(50, 150)
+
+        # Game Over
+        if enemy_y[i] >= 440:
+            for j in range (num_enemies):
+                enemy_y[j] = 2000
+            game_over_text()
+            break
         enemy0(enemy_x[i], enemy_y[i], i)
+
+
         # Collision
         collision = is_collision(enemy_x[i], enemy_y[i], balloon_x, balloon_y)
         if collision:
